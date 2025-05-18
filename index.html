@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pansy Bloom Date Calculator</title>
+</head>
+<body>
+  <h2>Pansy Bloom Date Calculator</h2>
+
+  <h3>Option 1: Calculate Bloom Window from Seed Date</h3>
+  <label for="seedDate">Seed Sowing Date:</label>
+  <input type="date" id="seedDate" />
+  <button onclick="calculateBloom()">Estimate Bloom Dates</button>
+  <p id="bloomResult"></p>
+
+  <hr>
+
+  <h3>Option 2: Calculate Ideal Seed Date from Target Bloom Date</h3>
+  <label for="bloomDate">Target Bloom Date:</label>
+  <input type="date" id="bloomDate" />
+  <button onclick="calculateSeedDate()">Estimate Seed Date Range</button>
+  <p id="seedResult"></p>
+
+  <script>
+    function calculateBloom() {
+      const seedInput = document.getElementById("seedDate").value;
+      if (!seedInput) {
+        document.getElementById("bloomResult").textContent = "Please enter a seed sowing date.";
+        return;
+      }
+
+      const seedDate = new Date(seedInput);
+      const bloomStart = new Date(seedDate);
+      bloomStart.setDate(seedDate.getDate() + 84); // 12 weeks
+      const bloomEnd = new Date(seedDate);
+      bloomEnd.setDate(seedDate.getDate() + 98); // 14 weeks
+
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById("bloomResult").innerHTML =
+        `Estimated bloom window: <strong>${bloomStart.toLocaleDateString(undefined, options)}</strong> to <strong>${bloomEnd.toLocaleDateString(undefined, options)}</strong>.`;
+    }
+
+    function calculateSeedDate() {
+      const bloomInput = document.getElementById("bloomDate").value;
+      if (!bloomInput) {
+        document.getElementById("seedResult").textContent = "Please enter a target bloom date.";
+        return;
+      }
+
+      const bloomDate = new Date(bloomInput);
+      const earliestSeed = new Date(bloomDate);
+      earliestSeed.setDate(bloomDate.getDate() - 98); // 14 weeks
+      const latestSeed = new Date(bloomDate);
+      latestSeed.setDate(bloomDate.getDate() - 84); // 12 weeks
+
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById("seedResult").innerHTML =
+        `Ideal seed sowing window: <strong>${earliestSeed.toLocaleDateString(undefined, options)}</strong> to <strong>${latestSeed.toLocaleDateString(undefined, options)}</strong>.`;
+    }
+  </script>
+</body>
+</html>
